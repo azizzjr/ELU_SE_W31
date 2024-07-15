@@ -16,28 +16,19 @@ class TestShoppingCart(unittest.TestCase):
             {'name': 'Item C', 'price': 'invalid'}
         ]
 
-    @patch('shopping_cart.CART', [
-        {'name': 'Item A', 'price': 10.99},
-        {'name': 'Item B', 'price': 5.99},
-        {'name': 'Item C', 'price': 8.49}
-    ])
-    def test_calculate_total(self, mock_cart):
-        total = CalculateTotal(mock_cart)
+    def test_calculate_total_valid_cart(self):
+        total = CalculateTotal(self.cart)
         self.assertEqual(total, 25.47)
 
-    @patch('shopping_cart.CART', [
-        {'name': 'Item A', 'price': 10.99},
-        {'name': 'Item B', 'price': 5.99},
-        {'name': 'Item C', 'price': 'invalid'}
-    ])
-    def test_calculate_total_with_invalid_price(self, mock_cart):
+    def test_calculate_total_invalid_cart(self):
         with self.assertRaises(TypeError):
-            CalculateTotal(mock_cart)
+            CalculateTotal(self.invalid_cart)
 
     def test_display_total(self):
         total = 25.47
-        display_message = display_total(total)
-        self.assertEqual(display_message, "Total price: " + str(total))
+        with patch('builtins.print') as mocked_print:
+            display_total(total)
+            mocked_print.assert_called_with("Total price: 25.47")
 
 if __name__ == '__main__':
     unittest.main()

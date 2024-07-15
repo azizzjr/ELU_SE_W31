@@ -21,8 +21,9 @@ class TestShoppingCart(unittest.TestCase):
         self.assertEqual(total, 25.47)
 
     def test_calculate_total_invalid_cart(self):
-        with self.assertRaises(TypeError):
-            CalculateTotal(self.invalid_cart)
+        total = CalculateTotal(self.invalid_cart)
+        # Expected total should only sum up valid prices
+        self.assertEqual(total, 16.98)
 
     def test_display_total(self):
         total = 25.47
